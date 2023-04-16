@@ -1,4 +1,4 @@
-# Adafruit SI1145 Library [![Build Status](https://github.com/adafruit/Adafruit_SI1145_Library/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_SI1145_Library/actions)
+# Adafruit SI1145 Library
 
 This is the Adafruit Arduino library for the  Si1145 UV/IR/Visible Light Sensor
 
