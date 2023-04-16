@@ -17,12 +17,8 @@
 #ifndef _SI1145_H_
 #define _SI1145_H_
 
-#if (ARDUINO >= 100)
-#include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
-#include <Adafruit_I2CDevice.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 /* COMMANDS */
 #define SI1145_PARAM_QUERY 0x80
@@ -143,29 +139,24 @@
 #define SI1145_REG_CHIPSTAT 0x30
 
 #define SI1145_ADDR 0x60
-/**
- * @brief Library for using the Si1145 UV/IR/Visible Light Sensor
- *
- */
-class Adafruit_SI1145 {
-public:
-  Adafruit_SI1145(void);
-  ~Adafruit_SI1145();
-  boolean begin(uint8_t addr = SI1145_ADDR, TwoWire *pBus = &Wire);
-  boolean begin(TwoWire *pBus);
-  void reset();
 
-  uint16_t readUV();
-  uint16_t readIR();
-  uint16_t readVisible();
-  uint16_t readProx();
+typedef struct si1145 {
+	void *dev_i2c;
+	uint8_t addr;
+} si1145_t;
 
-private:
-  uint16_t read16(uint8_t addr);
-  uint8_t read8(uint8_t addr);
-  void write8(uint8_t reg, uint8_t val);
-  uint8_t readParam(uint8_t p);
-  uint8_t writeParam(uint8_t p, uint8_t v);
-  Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
-};
+bool si1145_init(si1145_t *si1145, uint8_t addr, void *dev_i2c);
+void si1145_deinit(si1145_t *si1145);
+void si1145_reset(si1145_t *si1145);
+
+uint16_t si1145_readUV(si1145_t *si1145);
+uint16_t si1145_readIR(si1145_t *si1145);
+uint16_t si1145_readVisible(si1145_t *si1145);
+uint16_t si1145_readProx(si1145_t *si1145);
+
+extern void si1145_delay(uint32_t delay_seconds);
+extern int8_t si1145_i2c_init(si1145_t *si1145);
+extern void si1145_i2c_write_then_read(si1145_t *si1145, const uint8_t *buffer_tx, int buffer_tx_count, uint8_t *buffer_rx, int buffer_rx_count);
+extern void si1145_i2c_write(si1145_t *si1145, const uint8_t *buffer_tx, int buffer_tx_count);
+
 #endif
